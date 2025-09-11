@@ -4,7 +4,7 @@ import make_game
 games_list = open("test_codes.txt", "r", encoding="utf-8-sig")
 count = 0
 unadded_games = set()
-database = r"/Users/kiwi/Desktop/database?/bored.db"
+database = r"/Users/kiwi/Desktop/cs1200/bglib/bored.db"
 
 
 def parse_game(tree):

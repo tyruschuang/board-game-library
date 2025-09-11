@@ -1,6 +1,6 @@
 import make_game
 import sqlite3
-database = r"/Users/kiwi/Desktop/database?/bored.db"
+database = r"/Users/kiwi/Desktop/cs1200/bglib/bored.db"
 
 
 while True:
@@ -19,38 +19,10 @@ while True:
     # 3.0 if input matches 'q', break
     if "q" == command:
         break
-
     # 3.1 if input matches '1', you're going to find a matching game
     if "1" == command:
     # 3.1.1 Ask the user to give you the game name to find something like it
-        name = input("What is the name of the game?\n")
-        import query_library
-        column_names = ["id", "name", "type", "min_players", "max_players", "min_play_time", "max_play_time"]
-        game_data_tuple = query_library.get_game_data_by_name(database, name, column_names)
-        dictionary = dict(zip(column_names, game_data_tuple))
-        #clean up reading of dictionary?
-        print("What would you like to be similar to " + name + "?")
-        for i in range(0, len(column_names)):
-            print("\t" + str(i) + ". " + column_names[i])
-        similarity = input("\n")
-
-        if "2" == similarity:
-            query_library.select_game_by_type(database)
-
-        elif "3" == similarity:
-            query_library.select_game_by_min_players(database)
-
-        elif "4" == similarity:
-            query_library.select_game_by_max_players(database)
-
-        elif "5" == similarity:
-            query_library.select_game_by_min_play_time(database)
-
-        elif "6" == similarity:
-            query_library.select_game_by_max_play_time(database)
-
-        else:
-            pass
+        game_parts.search(database)
     # 3.1.2 Call the function to find all matching games
 
     # 3.2 if input matches '2', you're going to add a game to the database
@@ -63,10 +35,10 @@ while True:
         if "1" == information:
             print("Please find the game on boardgamegeek.com")
             game_id = input("What is the game id?\n")
-            with open("bgg_game.py") as file:
+            with open("add_from_list.py") as file:
                 exec(file.read())
         if "2" == information:
-            game_id = input("What is the game id?\n")
+            game_id = make_game.new_id(database)
             name = input("What is the name of the game?\n")
             game_type = input("What type of game is it?\n")
             min_players = input("What is the minimum amount of players?\n")
@@ -78,8 +50,11 @@ while True:
             make_game.create_game(database, game)
             print("Game added!")
     # to edit a game
-    #if "3" == command:
-        #game_id = input("What is the ID of the game you would like to edit?\n")
+    # figure out what you would like to edit
+    if "3" == command:
+        game_id = input("What is the ID of the game you would like to edit?\n")
+        
+
 
 
 

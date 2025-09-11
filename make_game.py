@@ -52,15 +52,31 @@ def remove_game(database, game_id):
         cur.execute(res, (game_id,))
         conn.commit()
         return cur.lastrowid
+    
+def new_id(database):
+    conn = create_connection(database)
+    with conn:
+        prev = ''' SELECT min(id) FROM test'''
+        cur = conn.cursor()
+        cur.execute(prev)
+        row = cur.fetchone()
+        print(row)
+        my_int = int(row[0])
+        if my_int > 0:
+            my_int = 0
+        return (my_int - 1)
 
 def main():
-    database = r"/Users/kiwi/Desktop/database?/bored.db"
+    database = r"/Users/kiwi/Desktop/cs1200/bglib/bored.db"
 
-    if exists_game(database, game_id):
-        remove_game(database, game_id)
-        print("Game removed!")
-    game_create = create_game(database, game)
+    #if exists_game(database, game_id):
+    #    remove_game(database, game_id)
+    #    print("Game removed!")
+    #game_create = create_game(database, game)
 
 
 if __name__ == '__main__':
     main()
+
+
+print(new_id(r"/Users/kiwi/Desktop/cs1200/bglib/bored.db"))
