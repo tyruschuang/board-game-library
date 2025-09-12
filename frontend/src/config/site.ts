@@ -1,0 +1,107 @@
+export type SiteConfig = typeof siteConfig;
+
+export const siteConfig = {
+  name: "Boardy | The Ultimate Board Game Manager",
+  description: "Organize your games. Discover new favorites. Plan the perfect game night.",
+  features: [
+    {
+      name: "Personalized Collections",
+      desc:
+          "Mark games as Owned, Wishlisted, or Played. Filter by time, weight, or tags.",
+      icon: "🎛️",
+    },
+    {
+      name: "Powerful Discovery",
+      desc:
+          "Search by mechanics, themes, or player counts to find your next favorite.",
+      icon: "🔎",
+    },
+    {
+      name: "Similarity Engine",
+      desc:
+          "See recommendations with transparent reasons: “shares deck-building + 2–4 players.”",
+      icon: "🧠",
+    },
+    {
+      name: "Social Shelves",
+      desc:
+          "Follow friends, compare overlaps, and build shared collections for game nights.",
+      icon: "👥",
+    },
+    {
+      name: "Game Night Planner",
+      desc:
+          "Propose dates, auto-suggest games that fit your group size, and track RSVPs.",
+      icon: "📆",
+    },
+    {
+      name: "Privacy Controls",
+      desc:
+          "Fine-grained visibility for shelves and activity—public, friends-only, or private.",
+      icon: "🔒",
+    },
+  ],
+  navItems: [
+    {
+      label: "Home",
+      href: "/",
+    },
+    {
+      label: "Docs",
+      href: "/docs",
+    },
+    {
+      label: "Pricing",
+      href: "/pricing",
+    },
+    {
+      label: "Blog",
+      href: "/blog",
+    },
+    {
+      label: "About",
+      href: "/about",
+    },
+  ],
+  navMenuItems: [
+    {
+      label: "Profile",
+      href: "/profile",
+    },
+    {
+      label: "Dashboard",
+      href: "/dashboard",
+    },
+    {
+      label: "Projects",
+      href: "/projects",
+    },
+    {
+      label: "Team",
+      href: "/team",
+    },
+    {
+      label: "Calendar",
+      href: "/calendar",
+    },
+    {
+      label: "Settings",
+      href: "/settings",
+    },
+    {
+      label: "Help & Feedback",
+      href: "/help-feedback",
+    },
+    {
+      label: "Logout",
+      href: "/logout",
+    },
+  ],
+  links: {
+    github: "https://github.com/heroui-inc/heroui",
+    twitter: "https://twitter.com/hero_ui",
+    docs: "https://heroui.com",
+    discord: "https://discord.gg/9b6yyZKmH4",
+    sponsor: "https://patreon.com/jrgarciadev",
+  },
+};
