@@ -17,7 +17,7 @@ import clsx from "clsx";
 import {siteConfig} from "@/src/config/site";
 import {HeartFilledIcon, Logo, SearchIcon,} from "@/src/components/icons";
 
-export const Navbar = () => {
+export const Footer = () => {
     const searchInput = (
         <Input
             aria-label="Search"
@@ -46,7 +46,7 @@ export const Navbar = () => {
                         <p className="font-bold text-inherit">Boardy</p>
                     </NextLink>
                 </NavbarBrand>
-                {/*Desktop Navbar Content*/}
+                {/*Desktop Header Content*/}
                 <ul className="hidden lg:flex gap-4 justify-start ml-2">
                     {siteConfig.navItems.map((item) => (
                         <NavbarItem key={item.href}>
@@ -85,7 +85,7 @@ export const Navbar = () => {
                 </NavbarItem>
             </NavbarContent>
 
-            {/* Mobile Navbar Content */}
+            {/* Mobile Header Content */}
             <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
                 <NavbarMenuToggle/>
             </NavbarContent>
