@@ -1,19 +1,31 @@
-import {SearchIcon} from "@/src/components/icons";
-import { Input } from "@heroui/input";
+import {SearchIcon} from "@/src/components/Icons";
+import {Input} from "@heroui/input";
+import * as React from "react";
 
-export const SearchBar = () => (
+type InputProps = React.ComponentProps<typeof Input>;
+
+export const SearchBar = ({
+    placeholder = "Search Board Games",
+    size = "lg",
+    radius = "full",
+    classNames,
+    ...props
+}: InputProps) => (
     <Input
         aria-label="Search"
+        type="search"
+        labelPlacement="outside"
+        placeholder={placeholder}
+        size={size as any}
+        radius={radius as any}
         classNames={{
             inputWrapper: "bg-default-100",
             input: "text-sm",
+            ...classNames,
         }}
-        labelPlacement="outside"
-        placeholder="Search Board Games"
         startContent={
-            <SearchIcon
-                className="text-base text-default-400 pointer-events-none flex-shrink-0"/>
+            <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0"/>
         }
-        type="search"
+        {...props}
     />
 );

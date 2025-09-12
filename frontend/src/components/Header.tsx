@@ -7,7 +7,7 @@ import NextLink from "next/link";
 import clsx from "clsx";
 
 import {siteConfig} from "@/src/config/site";
-import {Logo, SearchIcon,} from "@/src/components/icons";
+import {Logo, SearchIcon,} from "@/src/components/Icons";
 import {Button} from "@heroui/button";
 import { Link } from "@heroui/link";
 import { SearchBar } from "./SearchBar";
@@ -24,13 +24,11 @@ export const Header = () => {
             {/*Left*/}
             <NavbarContent justify="start">
                 {/*Logo + Name, always shown*/}
-                <NavbarBrand as="li" className="gap-3 max-w-fit">
-                    <NextLink className="flex justify-start items-center gap-1"
-                              href="/">
-                        <Logo/>
-                        <p className="font-bold text-inherit">Boardy</p>
-                    </NextLink>
-                </NavbarBrand>
+                <NextLink className="flex justify-start items-center gap-2"
+                          href="/">
+                    <Logo/>
+                    <p className="font-bold text-inherit">Boardy</p>
+                </NextLink>
                 {/*Desktop Header Content*/}
                 <ul className="hidden md:flex gap-4 justify-start ml-2">
                     {siteConfig.navItems.map((item) => (

@@ -1,117 +1,100 @@
-import {
-    Navbar as HeroUINavbar,
-    NavbarBrand,
-    NavbarContent,
-    NavbarItem,
-    NavbarMenu,
-    NavbarMenuItem,
-    NavbarMenuToggle,
-} from "@heroui/navbar";
+"use client";
+
 import {Button} from "@heroui/button";
 import {Link} from "@heroui/link";
 import {Input} from "@heroui/input";
-import {link as linkStyles} from "@heroui/theme";
 import NextLink from "next/link";
-import clsx from "clsx";
-
 import {siteConfig} from "@/src/config/site";
-import {HeartFilledIcon, Logo, SearchIcon,} from "@/src/components/icons";
+import {Logo, GithubIcon} from "@/src/components/Icons";
 
 export const Footer = () => {
-    const searchInput = (
-        <Input
-            aria-label="Search"
-            classNames={{
-                inputWrapper: "bg-default-100",
-                input: "text-sm",
-            }}
-            labelPlacement="outside"
-            placeholder="Search Board Games"
-            startContent={
-                <SearchIcon
-                    className="text-base text-default-400 pointer-events-none flex-shrink-0"/>
-            }
-            type="search"
-        />
-    );
+    const year = new Date().getFullYear();
+
+    const productLinks = siteConfig.navItems.filter(n => n.href !== "/");
 
     return (
-        <HeroUINavbar maxWidth="xl" position="sticky">
-            <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
-                {/*Logo + Name*/}
-                <NavbarBrand as="li" className="gap-3 max-w-fit">
-                    <NextLink className="flex justify-start items-center gap-1"
-                              href="/frontend/public">
-                        <Logo/>
-                        <p className="font-bold text-inherit">Boardy</p>
-                    </NextLink>
-                </NavbarBrand>
-                {/*Desktop Header Content*/}
-                <ul className="hidden lg:flex gap-4 justify-start ml-2">
-                    {siteConfig.navItems.map((item) => (
-                        <NavbarItem key={item.href}>
-                            <NextLink
-                                className={clsx(
-                                    linkStyles({color: "foreground"}),
-                                    "data-[active=true]:text-primary data-[active=true]:font-medium",
-                                )}
-                                color="foreground"
-                                href={item.href}
-                            >
-                                {item.label}
-                            </NextLink>
-                        </NavbarItem>
-                    ))}
-                </ul>
-            </NavbarContent>
+        <footer className="mt-16">
+            {/* Accent line */}
+            <div className="h-px w-full bg-gradient-to-r from-primary/50 via-fuchsia-500/40 to-cyan-400/40"/>
 
-            <NavbarContent
-                className="hidden sm:flex basis-1/5 sm:basis-full"
-                justify="end"
-            >
-                {/*Search Bar*/}
-                <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
-                <NavbarItem className="hidden md:flex">
-                    <Button
-                        isExternal
-                        as={Link}
-                        className="text-sm font-normal text-default-600 bg-default-100"
-                        href={siteConfig.links.sponsor}
-                        startContent={<HeartFilledIcon className="text-danger"/>}
-                        variant="flat"
-                    >
-                        Sponsor
-                    </Button>
-                </NavbarItem>
-            </NavbarContent>
-
-            {/* Mobile Header Content */}
-            <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-                <NavbarMenuToggle/>
-            </NavbarContent>
-
-            <NavbarMenu>
-                {searchInput}
-                <div className="mx-4 mt-2 flex flex-col gap-2">
-                    {siteConfig.navMenuItems.map((item, index) => (
-                        <NavbarMenuItem key={`${item}-${index}`}>
-                            <Link
-                                color={
-                                    index === 2
-                                        ? "primary"
-                                        : index === siteConfig.navMenuItems.length - 1
-                                            ? "danger"
-                                            : "foreground"
-                                }
-                                href="#"
-                                size="lg"
-                            >
-                                {item.label}
+            <div className="container mx-auto max-w-7xl px-6 md:px-12 py-10">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    {/* Brand */}
+                    <div className="flex flex-col gap-3">
+                        <NextLink href="/" className="flex items-center gap-2">
+                            <Logo/>
+                            <span className="font-semibold">Boardy</span>
+                        </NextLink>
+                        <p className="text-foreground-500 text-sm">
+                            Organize your games. Discover new favorites. Plan the perfect game night.
+                        </p>
+                        <div className="flex gap-3 pt-1">
+                            <Link isExternal href={siteConfig.links.github} aria-label="GitHub" className="text-foreground-500 hover:text-foreground">
+                                <GithubIcon/>
                             </Link>
-                        </NavbarMenuItem>
-                    ))}
+                            <Link isExternal href={siteConfig.links.discord} aria-label="Discord" className="text-foreground-500 hover:text-foreground">
+                                <span className="text-xl">💬</span>
+                            </Link>
+                            <Link isExternal href={siteConfig.links.twitter} aria-label="Twitter" className="text-foreground-500 hover:text-foreground">
+                                <span className="text-xl">𝕏</span>
+                            </Link>
+                            <Link isExternal href={siteConfig.links.docs} aria-label="Docs" className="text-foreground-500 hover:text-foreground">
+                                <span className="text-xl">📚</span>
+                            </Link>
+                        </div>
+                    </div>
+
+                    {/* Product */}
+                    <div>
+                        <h3 className="text-sm font-semibold tracking-wide text-foreground-600">Product</h3>
+                        <ul className="mt-3 space-y-2">
+                            {productLinks.map((item) => (
+                                <li key={item.href}>
+                                    <NextLink href={item.href} className="text-sm text-foreground-500 hover:text-foreground transition-colors">
+                                        {item.label}
+                                    </NextLink>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Resources */}
+                    <div>
+                        <h3 className="text-sm font-semibold tracking-wide text-foreground-600">Resources</h3>
+                        <ul className="mt-3 space-y-2">
+                            <li>
+                                <Link isExternal href={siteConfig.links.docs} className="text-sm text-foreground-500 hover:text-foreground transition-colors">Docs</Link>
+                            </li>
+                            <li>
+                                <NextLink href="/blog" className="text-sm text-foreground-500 hover:text-foreground transition-colors">Blog</NextLink>
+                            </li>
+                            <li>
+                                <NextLink href="/pricing" className="text-sm text-foreground-500 hover:text-foreground transition-colors">Pricing</NextLink>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Newsletter */}
+                    <div>
+                        <h3 className="text-sm font-semibold tracking-wide text-foreground-600">Stay in the loop</h3>
+                        <p className="text-foreground-500 text-sm mt-3">Get updates on new features and curated game picks.</p>
+                        <form className="mt-4 flex flex-col sm:flex-row gap-2" onSubmit={(e) => e.preventDefault()}>
+                            <Input
+                                type="email"
+                                placeholder="you@example.com"
+                                aria-label="Email address"
+                                className="sm:flex-1"
+                            />
+                            <Button color="primary" type="submit">Subscribe</Button>
+                        </form>
+                    </div>
                 </div>
-            </NavbarMenu>
-        </HeroUINavbar>
+
+                {/* Bottom bar */}
+                <div className="mt-10 flex flex-col md:flex-row items-center justify-center gap-4 text-sm text-foreground-500">
+                    <p>© {year} Boardy. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
     );
 };
