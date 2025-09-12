@@ -14,9 +14,6 @@ export const Footer = () => {
 
     return (
         <footer className="mt-16">
-            {/* Accent line */}
-            <div className="h-px w-full bg-gradient-to-r from-primary/50 via-fuchsia-500/40 to-cyan-400/40"/>
-
             <div className="container mx-auto max-w-7xl px-6 md:px-12 py-10">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     {/* Brand */}
@@ -26,7 +23,7 @@ export const Footer = () => {
                             <span className="font-semibold">Boardy</span>
                         </NextLink>
                         <p className="text-foreground-500 text-sm">
-                            Organize your games. Discover new favorites. Plan the perfect game night.
+                            {siteConfig.description}
                         </p>
                         <div className="flex gap-3 pt-1">
                             <Link isExternal href={siteConfig.links.github} aria-label="GitHub" className="text-foreground-500 hover:text-foreground">

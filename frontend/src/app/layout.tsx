@@ -33,11 +33,13 @@ export default function RootLayout({children}: { children: React.ReactNode; }) {
         >
         <Providers>
             <div className="relative flex flex-col h-screen">
-                <Header/>
-                <main className="container mx-auto max-w-7xl pt-2 px-6 flex-grow md:px-12">
-                    {children}
+                <main className="container mx-auto max-w-7xl">
+                    <Header/>
+                    <section className="pt-2 px-6 flex-grow md:px-12">
+                        {children}
+                    </section>
+                    <Footer/>
                 </main>
-                <Footer/>
             </div>
         </Providers>
         </body>

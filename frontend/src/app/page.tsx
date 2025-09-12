@@ -26,7 +26,7 @@ export default function Home() {
             >
                 <div className="md:basis-1/2 flex flex-col gap-5">
                     <span className={title()}>
-                        Organize your games. Discover new favorites. Plan the perfect game night.
+                        {siteConfig.description}
                     </span>
                     {/* CTA block */}
                     <div className="flex flex-col gap-3 md:gap-4">

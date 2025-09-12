@@ -1,8 +1,8 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Next.js + HeroUI",
-  description: "Make beautiful websites regardless of your design experience.",
+  name: "Boardy | The Ultimate Board Game Manager",
+  description: "Organize your games. Discover new favorites. Plan the perfect game night.",
   features: [
     {
       name: "Personalized Collections",
