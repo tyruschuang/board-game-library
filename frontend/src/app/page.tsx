@@ -18,12 +18,17 @@ import Image from "next/image";
 
 export default function Home() {
     return (
-        <div className="flex flex-col gap-18">
+        <div className="relative flex flex-col gap-18 overflow-hidden">
             {/*Hero*/}
             <section
                 id="hero"
                 className="container mx-auto max-w-7xl relative min-h-[85vh] flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8"
             >
+                {/* Hero backdrop: gradient + subtle fade texture */}
+                <div
+                    aria-hidden
+                    className="pointer-events-none absolute -z-20 left-1/2 -translate-x-1/2 top-[-6%] h-[120%] w-[140%] rounded-[48px] bg-gradient-to-b from-primary/10 via-fuchsia-500/5 to-transparent dark:from-primary/15 [mask-image:radial-gradient(1100px_600px_at_50%_15%,black,transparent_70%)]"
+                />
                 <div className="md:basis-1/2 flex flex-col gap-5">
                     <span className={title()}>
                         {siteConfig.description}
@@ -40,14 +45,21 @@ export default function Home() {
                 </div>
                 {/*image here*/}
                 <div className="hidden md:block md:basis-1/2">
-                    <Image src="/images/hero.jpg" alt="Board Game" width={2400} height={2400}/>
+                    <Image
+                        src="/images/hero.png"
+                        alt="Board Game"
+                        width={2400}
+                        height={2400}
+                        priority
+                        className="select-none motion-safe:animate-float-slow motion-reduce:animate-none will-change-transform transition-transform duration-700 ease-out drop-shadow-[0_20px_60px_rgba(56,189,248,0.25)] dark:drop-shadow-[0_16px_50px_rgba(99,102,241,0.25)] hover:-rotate-1 hover:scale-[1.02]"
+                    />
                 </div>
             </section>
 
             {/*Features*/}
             <section className="container mx-auto max-w-7xl">
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-                    Everything you need to play more, faster
+                    All your board gaming needs in one place
                 </h2>
                 <p className="text-foreground-500 mt-2">
                     Curate collections, discover similar games, and plan unforgettable game nights.

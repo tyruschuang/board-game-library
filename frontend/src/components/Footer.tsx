@@ -25,20 +25,6 @@ export const Footer = () => {
                         <p className="text-foreground-500 text-sm">
                             {siteConfig.description}
                         </p>
-                        <div className="flex gap-3 pt-1">
-                            <Link isExternal href={siteConfig.links.github} aria-label="GitHub" className="text-foreground-500 hover:text-foreground">
-                                <GithubIcon/>
-                            </Link>
-                            <Link isExternal href={siteConfig.links.discord} aria-label="Discord" className="text-foreground-500 hover:text-foreground">
-                                <span className="text-xl">💬</span>
-                            </Link>
-                            <Link isExternal href={siteConfig.links.twitter} aria-label="Twitter" className="text-foreground-500 hover:text-foreground">
-                                <span className="text-xl">𝕏</span>
-                            </Link>
-                            <Link isExternal href={siteConfig.links.docs} aria-label="Docs" className="text-foreground-500 hover:text-foreground">
-                                <span className="text-xl">📚</span>
-                            </Link>
-                        </div>
                     </div>
 
                     {/* Product */}
@@ -59,9 +45,6 @@ export const Footer = () => {
                     <div>
                         <h3 className="text-sm font-semibold tracking-wide text-foreground-600">Resources</h3>
                         <ul className="mt-3 space-y-2">
-                            <li>
-                                <Link isExternal href={siteConfig.links.docs} className="text-sm text-foreground-500 hover:text-foreground transition-colors">Docs</Link>
-                            </li>
                             <li>
                                 <NextLink href="/blog" className="text-sm text-foreground-500 hover:text-foreground transition-colors">Blog</NextLink>
                             </li>

@@ -14,6 +14,15 @@ const config = {
                 sans: ["var(--font-sans)"],
                 mono: ["var(--font-mono)"],
             },
+            keyframes: {
+                float: {
+                    '0%, 100%': { transform: 'translateY(0px) rotate(-0.25deg)' },
+                    '50%': { transform: 'translateY(-8px) rotate(0.25deg)' },
+                },
+            },
+            animation: {
+                'float-slow': 'float 8s ease-in-out infinite',
+            },
         },
     },
     darkMode: "class",
