@@ -11,6 +11,7 @@ import {Footer} from "@/src/components/Footer";
 import React from "react";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
+import {useTheme} from "next-themes";
 
 export const metadata: Metadata = {
     title: {
@@ -24,6 +25,13 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({children}: { children: React.ReactNode; }) {
+
+    const { theme, setTheme, systemTheme } = useTheme();
+
+    React.useEffect(() => {
+        setTheme("light");
+    });
+
     return (
         <html suppressHydrationWarning lang="en">
         <head/>
@@ -36,7 +44,7 @@ export default function RootLayout({children}: { children: React.ReactNode; }) {
         <Providers>
             <Analytics/>
             <SpeedInsights/>
-            <main className="light container mx-auto max-w-7xl relative flex flex-col h-screen">
+            <main className="container mx-auto max-w-7xl relative flex flex-col h-screen">
                 <Header/>
                 <section className="pt-2 px-6 flex-grow md:px-12">
                     {children}

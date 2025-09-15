@@ -52,7 +52,7 @@ export const Header = () => {
             </NavbarContent>
 
             {/*Right, desktop*/}
-            <NavbarContent justify="end" className="hidden basis-1/5 md:flex">
+            <NavbarContent justify="end" className="hidden basis-1/5 md:flex gap-2">
                 {/*If home page is active*/}
                 {!isHome && (
                     <NavbarItem>
