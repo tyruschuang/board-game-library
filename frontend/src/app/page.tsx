@@ -10,7 +10,7 @@ import {siteConfig} from "@/src/config/site";
 import {subtitle, title} from "@/src/components/primitives";
 import {GithubIcon} from "@/src/components/Icons";
 import {Carousel} from "@/src/components/Carousel";
-import {sampleGames} from "@/src/data/sampleGames";
+import {sampleGames} from "@/src/config/sampleGames";
 import {StatsSection} from "@/src/components/Stats";
 import {SearchBar} from "@/src/components/SearchBar";
 import clsx from "clsx";
