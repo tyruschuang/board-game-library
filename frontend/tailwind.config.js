@@ -26,7 +26,12 @@ const config = {
         },
     },
     darkMode: "class",
-    plugins: [heroui()],
+    plugins: [
+        heroui({
+            defaultTheme: "light", // default theme from the themes object
+            defaultExtendTheme: "light", // default theme to extend on custom themes
+        }),
+    ],
 }
 
 module.exports = config;
