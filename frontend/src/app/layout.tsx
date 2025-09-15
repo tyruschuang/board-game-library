@@ -36,15 +36,13 @@ export default function RootLayout({children}: { children: React.ReactNode; }) {
         <Providers>
             <Analytics/>
             <SpeedInsights/>
-            <div className="relative flex flex-col h-screen">
-                <main className="light container mx-auto max-w-7xl">
-                    <Header/>
-                    <section className="pt-2 px-6 flex-grow md:px-12">
-                        {children}
-                    </section>
-                    <Footer/>
-                </main>
-            </div>
+            <main className="light container mx-auto max-w-7xl relative flex flex-col h-screen">
+                <Header/>
+                <section className="pt-2 px-6 flex-grow md:px-12">
+                    {children}
+                </section>
+                <Footer/>
+            </main>
         </Providers>
         </body>
         </html>
