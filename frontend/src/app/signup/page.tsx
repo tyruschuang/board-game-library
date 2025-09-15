@@ -1,5 +1,5 @@
 "use client"
-import { FormEvent, useMemo, useState } from 'react'
+import { FormEvent, useMemo, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Card, CardBody, CardHeader } from "@heroui/card"
 import { Input } from "@heroui/input"
@@ -9,6 +9,14 @@ import { title, subtitle } from "@/src/components/primitives"
 import { EyeIcon, EyeOffIcon } from "@/src/components/Icons"
 
 export default function SignupPage() {
+    return (
+        <Suspense fallback={<div className="container mx-auto max-w-7xl p-6">Loading…</div>}>
+            <SignupForm />
+        </Suspense>
+    )
+}
+
+function SignupForm() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const next = useMemo(() => searchParams.get('next') || '/profile', [searchParams])
