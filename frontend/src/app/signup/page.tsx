@@ -6,6 +6,7 @@ import { Input } from "@heroui/input"
 import { Button } from "@heroui/button"
 import { Link } from "@heroui/link"
 import { title, subtitle } from "@/src/components/primitives"
+import { EyeIcon, EyeOffIcon } from "@/src/components/Icons"
 
 export default function SignupPage() {
     const router = useRouter()
@@ -14,7 +15,8 @@ export default function SignupPage() {
 
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
-    const [showConfirm, setShowConfirm] = useState(false)
+    const [passwordShown, setPasswordShown] = useState(false)
+    const [confirmShown, setConfirmShown] = useState(false)
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -88,20 +90,42 @@ export default function SignupPage() {
                             />
                             <Input
                                 name="password"
-                                type="password"
+                                type={passwordShown ? 'text' : 'password'}
                                 label="Password"
                                 placeholder="••••••••"
-                                description="Use at least 8 characters."
                                 variant="bordered"
                                 required
+                                endContent={
+                                    <button
+                                        type="button"
+                                        className="text-default-500 hover:text-foreground"
+                                        onClick={() => setPasswordShown((v) => !v)}
+                                        aria-label={passwordShown ? 'Hide password' : 'Show password'}
+                                        aria-pressed={passwordShown}
+                                    >
+                                        {passwordShown ? <EyeOffIcon /> : <EyeIcon />}
+                                    </button>
+                                }
                             />
                             <Input
                                 name="confirm"
-                                type="password"
+                                type={confirmShown ? 'text' : 'password'}
                                 label="Confirm Password"
                                 placeholder="••••••••"
                                 variant="bordered"
+                                description="Passwords must be at least 8 characters long."
                                 required
+                                endContent={
+                                    <button
+                                        type="button"
+                                        className="text-default-500 hover:text-foreground"
+                                        onClick={() => setConfirmShown((v) => !v)}
+                                        aria-label={confirmShown ? 'Hide password' : 'Show password'}
+                                        aria-pressed={confirmShown}
+                                    >
+                                        {confirmShown ? <EyeOffIcon /> : <EyeIcon />}
+                                    </button>
+                                }
                             />
                             {error && (
                                 <div className="text-danger text-sm" role="alert">
@@ -122,4 +146,3 @@ export default function SignupPage() {
         </section>
     )
 }
-

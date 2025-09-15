@@ -171,3 +171,66 @@ export const SearchIcon = (props: IconSvgProps) => (
         />
     </svg>
 );
+
+export const EyeIcon = (props: IconSvgProps) => (
+    <svg
+        aria-hidden="true"
+        fill="none"
+        focusable="false"
+        height="1em"
+        role="presentation"
+        viewBox="0 0 24 24"
+        width="1em"
+        {...props}
+    >
+        <path
+            d="M2.458 12C3.732 7.943 7.522 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.478 0-8.268-2.943-9.542-7Z"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+);
+
+export const EyeOffIcon = (props: IconSvgProps) => (
+    <svg
+        aria-hidden="true"
+        fill="none"
+        focusable="false"
+        height="1em"
+        role="presentation"
+        viewBox="0 0 24 24"
+        width="1em"
+        {...props}
+    >
+        <path
+            d="M3 3l18 18"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M10.584 10.585A2.001 2.001 0 0 0 12 14a2 2 0 0 0 1.414-3.414"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M17.94 17.94C16.5 18.612 14.82 19 13 19 8.523 19 4.732 16.057 3.458 12c.45-1.432 1.196-2.712 2.168-3.773M8.1 8.1C9.29 7.39 10.61 7 12 7c4.478 0 8.268 2.943 9.542 7-.383 1.222-1.004 2.328-1.811 3.25"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+);

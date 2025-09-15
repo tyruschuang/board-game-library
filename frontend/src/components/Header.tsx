@@ -60,8 +60,10 @@ export const Header = () => {
                     </NavbarItem>
                 )}
                 <NavbarItem>
-                    <Button color={"primary"} href="/login">
-                        {isHome ? "Get Started" : "Log In"}
+                    <Button color="primary">
+                        <NextLink color={"primary"} href={isHome ? "/signup" : "/login"}>
+                            {isHome ? "Get Started" : "Log In"}
+                        </NextLink>
                     </Button>
                 </NavbarItem>
 

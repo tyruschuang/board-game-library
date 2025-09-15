@@ -1,8 +1,0 @@
-{
-  "functions": {
-    "src/api/**/*.py": {
-      "runtime": "python@3.12"
-    }
-  }
-}
-

@@ -6,6 +6,7 @@ import {Input} from "@heroui/input";
 import {Button} from "@heroui/button";
 import {Link} from "@heroui/link";
 import {title, subtitle} from "@/src/components/primitives";
+import { EyeIcon, EyeOffIcon } from "@/src/components/Icons";
 
 export default function LoginPage() {
     const router = useRouter()
@@ -14,6 +15,7 @@ export default function LoginPage() {
 
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
+    const [passwordShown, setPasswordShown] = useState(false)
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -64,11 +66,22 @@ export default function LoginPage() {
                             />
                             <Input
                                 name="password"
-                                type="password"
+                                type={passwordShown ? "text" : "password"}
                                 label="Password"
                                 placeholder="••••••••"
                                 variant="bordered"
                                 required
+                                endContent={
+                                    <button
+                                        type="button"
+                                        className="text-default-500 hover:text-foreground"
+                                        onClick={() => setPasswordShown((v) => !v)}
+                                        aria-label={passwordShown ? 'Hide password' : 'Show password'}
+                                        aria-pressed={passwordShown}
+                                    >
+                                        {passwordShown ? <EyeOffIcon /> : <EyeIcon />}
+                                    </button>
+                                }
                             />
                             {error && (
                                 <div className="text-danger text-sm" role="alert">
