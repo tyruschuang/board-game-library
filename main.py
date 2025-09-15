@@ -1,5 +1,6 @@
 import make_game
 import sqlite3
+import game_parts
 database = r"/Users/kiwi/Desktop/cs1200/bglib/bored.db"
 
 
@@ -52,8 +53,7 @@ while True:
     # to edit a game
     # figure out what you would like to edit
     if "3" == command:
-        game_id = input("What is the ID of the game you would like to edit?\n")
-        
+        game_parts.edit(database)
 
 
 

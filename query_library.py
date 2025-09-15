@@ -33,7 +33,6 @@ def get_game_data_by_name(database, name, column_names):
     with conn:
         cur = conn.cursor()
         command = "SELECT " + ", ".join(column_names) + ' FROM test WHERE name = ' + "'" + name + "'"
-        print("\n" + command + "\n")
         cur.execute(command)
         row = cur.fetchone()
         return row

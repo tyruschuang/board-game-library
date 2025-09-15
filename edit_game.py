@@ -17,18 +17,20 @@ def create_connection(db_file):
     return conn
 
 
-def update_game(conn, games):
+def update_game(database, column, id):
     """
     update players of a game
     :param conn:
     :param games:
     :return: name
     """
-    sql = ''' UPDATE games
-              SET players = ?
-              WHERE name = ?'''
+    conn = create_connection(database)
     cur = conn.cursor()
-    cur.execute(sql, games)
+    sql = ''' UPDATE test
+              SET ''' + column + ''' = ?
+              WHERE id = ?'''
+    change = input("What would you like to change " + column + " to?\n")
+    cur.execute(sql, (change, id))
     conn.commit()
 
 

@@ -77,6 +77,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-print(new_id(r"/Users/kiwi/Desktop/cs1200/bglib/bored.db"))
