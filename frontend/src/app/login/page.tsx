@@ -7,6 +7,7 @@ import {Button} from "@heroui/button";
 import {Link} from "@heroui/link";
 import {title, subtitle} from "@/src/components/primitives";
 import { EyeIcon, EyeOffIcon } from "@/src/components/Icons";
+import { apiFetch } from '@/src/lib/api'
 
 export default function LoginPage() {
     return (
@@ -34,10 +35,9 @@ function LoginForm() {
         const email = formData.get('email')
         const password = formData.get('password')
 
-        const response = await fetch('/api/auth/login', {
+        const response = await apiFetch('/api/auth/login', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password }),
+            json: { email, password },
         })
 
         setLoading(false)

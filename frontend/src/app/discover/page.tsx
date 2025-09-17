@@ -38,9 +38,10 @@ export default function DiscoverPage() {
             const q = query.trim().toLowerCase()
             list = list.filter((g) => g.name.toLowerCase().includes(q))
         }
-        if (selectedTags.size) {
-            list = list.filter((g) => g.tags.some((t) => selectedTags.has(t)))
-        }
+    if (selectedTags.size) {
+      const required = Array.from(selectedTags)
+      list = list.filter((g) => required.every((t) => g.tags.includes(t)))
+    }
         if (selectedTime) {
             const bucket = TIME_BUCKETS.find((b) => b.id === selectedTime)
             if (bucket) {
@@ -135,9 +136,9 @@ export default function DiscoverPage() {
                                 </SelectItem>
                             )}
                         </Select>
-                        <div className="flex items-end">
-                            <Button variant="flat" onPress={clearFilters} className="w-full">Clear</Button>
-                        </div>
+                    </div>
+                    <div className="flex">
+                        <Button variant="flat" onPress={clearFilters} className="w-full">Clear</Button>
                     </div>
                 </CardBody>
             </Card>

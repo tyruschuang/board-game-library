@@ -11,13 +11,38 @@ import {Logo, SearchIcon,} from "@/src/components/Icons";
 import {Button} from "@heroui/button";
 import { Link } from "@heroui/link";
 import { SearchBar } from "./SearchBar";
+import {useEffect, useState} from 'react'
 import {usePathname} from "next/navigation";
+import { apiFetch } from '@/src/lib/api'
+import { Avatar } from '@/src/components/Avatar'
+
+type User = { id: number; email: string; name: string }
 
 export const Header = () => {
-
     const pathname = usePathname();
-
     const isHome = pathname === "/";
+    const [user, setUser] = useState<User | null>(null)
+
+    useEffect(() => {
+        let mounted = true
+        ;(async () => {
+            try {
+                const res = await apiFetch('/api/auth/me')
+                if (!mounted) return
+                if (res.ok) {
+                    const data = await res.json()
+                    setUser(data.user)
+                } else {
+                    setUser(null)
+                }
+            } catch {
+                setUser(null)
+            } finally {
+                // no-op
+            }
+        })()
+        return () => { mounted = false }
+    }, [])
 
     return (
         <Navbar
@@ -59,13 +84,22 @@ export const Header = () => {
                         <SearchBar/>
                     </NavbarItem>
                 )}
-                <NavbarItem>
-                    <Button color="primary">
-                        <NextLink color={"primary"} href={isHome ? "/signup" : "/login"}>
-                            {isHome ? "Get Started" : "Log In"}
+                {user ? (
+                    <NavbarItem>
+                        <NextLink href="/profile" className="flex items-center gap-2">
+                            <Avatar name={user.name} email={user.email} size={28} />
+                            <span className="hidden lg:inline">Profile</span>
                         </NextLink>
-                    </Button>
-                </NavbarItem>
+                    </NavbarItem>
+                ) : (
+                    <NavbarItem>
+                        <Button color="primary">
+                            <NextLink color={"primary"} href={isHome ? "/signup" : "/login"}>
+                                {isHome ? "Get Started" : "Log In"}
+                            </NextLink>
+                        </Button>
+                    </NavbarItem>
+                )}
 
             </NavbarContent>
 
@@ -88,13 +122,27 @@ export const Header = () => {
                                             ? "danger"
                                             : "foreground"
                                 }
-                                href="#"
+                                href={item.href}
                                 size="lg"
                             >
                                 {item.label}
                             </Link>
                         </NavbarMenuItem>
                     ))}
+                    {user ? (
+                        <NavbarMenuItem>
+                            <NextLink href="/profile" className="flex items-center gap-2">
+                                <Avatar name={user.name} email={user.email} size={28} />
+                                <span>Profile</span>
+                            </NextLink>
+                        </NavbarMenuItem>
+                    ) : (
+                        <NavbarMenuItem>
+                            <NextLink href={isHome ? "/signup" : "/login"}>
+                                {isHome ? "Get Started" : "Log In"}
+                            </NextLink>
+                        </NavbarMenuItem>
+                    )}
                 </div>
             </NavbarMenu>
         </Navbar>

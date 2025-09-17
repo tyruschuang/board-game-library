@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import {cookies} from 'next/headers'
 import {jwtVerify} from 'jose'
+import LogoutButton from '@/src/components/LogoutButton'
 
 export default async function ProfilePage() {
     // const token = (await cookies()).get('token')?.value
@@ -36,9 +37,7 @@ export default async function ProfilePage() {
                     {/*<p><strong>Name:</strong> {user.name}</p>*/}
                     {/*<p><strong>Roles:</strong> {user.roles.join(', ') || '—'}</p>*/}
                 </div>
-                <form action="/api/auth/logout" method="post">
-                    <button className="bg-danger text-white py-2 px-3 rounded" type="submit">Logout</button>
-                </form>
+                <LogoutButton />
             </div>
         )
     } catch {

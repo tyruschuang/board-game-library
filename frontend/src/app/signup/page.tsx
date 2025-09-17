@@ -7,6 +7,7 @@ import { Button } from "@heroui/button"
 import { Link } from "@heroui/link"
 import { title, subtitle } from "@/src/components/primitives"
 import { EyeIcon, EyeOffIcon } from "@/src/components/Icons"
+import { apiFetch } from '@/src/lib/api'
 
 export default function SignupPage() {
     return (
@@ -51,10 +52,9 @@ function SignupForm() {
         }
 
         setLoading(true)
-        const res = await fetch('/api/auth/register', {
+        const res = await apiFetch('/api/auth/register', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, password }),
+            json: { name, email, password },
         })
         setLoading(false)
 
