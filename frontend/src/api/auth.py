@@ -127,40 +127,8 @@ def ensure_db():
     _init_db()
 
 
-@bp.after_app_request
-def add_cors_headers(resp):
-    # CORS for local dev with credentialed requests
-    # If Origin is present, echo it back (or restrict via env)
-    origin = request.headers.get("Origin")
-    allow_env = os.environ.get("CORS_ALLOW_ORIGIN")  # e.g., http://localhost:3000
-
-    if allow_env:
-        allow_origin = allow_env
-    elif origin:
-        allow_origin = origin
-    else:
-        allow_origin = "*"
-
-    # When allowing credentials, wildcard origin is not permitted by browsers.
-    # We set Access-Control-Allow-Credentials always to true for dev convenience.
-    if allow_origin != "*":
-        resp.headers["Access-Control-Allow-Origin"] = allow_origin
-    else:
-        resp.headers.setdefault("Access-Control-Allow-Origin", allow_origin)
-
-    resp.headers.setdefault("Vary", "Origin")
-    resp.headers.setdefault("Access-Control-Allow-Credentials", "true")
-    resp.headers.setdefault("Access-Control-Allow-Headers", "Content-Type, Authorization")
-    resp.headers.setdefault("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-    resp.headers.setdefault("Access-Control-Expose-Headers", "Content-Type")
-    return resp
-
-
-@bp.route("/register", methods=["POST", "OPTIONS"])
+@bp.route("/register", methods=["POST"])
 def register():
-    if request.method == "OPTIONS":
-        return ("", 204)
-
     try:
         data = request.get_json(silent=True) or {}
         name = (data.get("name") or "").strip()
@@ -207,11 +175,8 @@ def register():
         return jsonify({"error": "Server error"}), 500
 
 
-@bp.route("/login", methods=["POST", "OPTIONS"])
+@bp.route("/login", methods=["POST"])
 def login():
-    if request.method == "OPTIONS":
-        return ("", 204)
-
     try:
         data = request.get_json(silent=True) or {}
         email = (data.get("email") or "").strip().lower()
@@ -248,11 +213,8 @@ def login():
         return jsonify({"error": "Server error"}), 500
 
 
-@bp.route("/logout", methods=["POST", "OPTIONS"])
+@bp.route("/logout", methods=["POST"])
 def logout():
-    if request.method == "OPTIONS":
-        return ("", 204)
-
     # Clear cookie
     resp = make_response(jsonify({"success": True}))
     resp.delete_cookie("token", path="/")
@@ -264,10 +226,8 @@ def health():
     return jsonify({"status": "ok"})
 
 
-@bp.route("/me", methods=["GET", "OPTIONS"])  # Current user info
+@bp.route("/me", methods=["GET"])  # Current user info
 def me():
-    if request.method == "OPTIONS":
-        return ("", 204)
     user = _verify_token_from_request()
     if not user:
         return jsonify({"authenticated": False}), 401
