@@ -7,7 +7,9 @@
     "next-dev": "next dev",
     "dev": "concurrently \"yarn next-dev\" \"yarn flask-dev\"",
     "build": "next build",
-    "start": "next start",
+    "flask-start": "python -m flask --app ../backend/flask_app.py run -p 5328",
+    "next-start": "next start",
+    "start": "concurrently \"yarn next-start\" \"yarn flask-start\"",
     "lint": "eslint --fix"
   },
   "dependencies": {
