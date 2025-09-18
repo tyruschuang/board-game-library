@@ -1,6 +1,4 @@
 import Link from 'next/link'
-import {cookies} from 'next/headers'
-import {jwtVerify} from 'jose'
 import LogoutButton from '@/src/components/LogoutButton'
 
 export default async function ProfilePage() {
@@ -37,7 +35,7 @@ export default async function ProfilePage() {
                     {/*<p><strong>Name:</strong> {user.name}</p>*/}
                     {/*<p><strong>Roles:</strong> {user.roles.join(', ') || '—'}</p>*/}
                 </div>
-                <LogoutButton />
+                <LogoutButton/>
             </div>
         )
     } catch {

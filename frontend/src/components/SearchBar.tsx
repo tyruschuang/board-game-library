@@ -5,12 +5,12 @@ import * as React from "react";
 type InputProps = React.ComponentProps<typeof Input>;
 
 export const SearchBar = ({
-    placeholder = "Search Board Games",
-    size = "lg",
-    radius = "full",
-    classNames,
-    ...props
-}: InputProps) => (
+                              placeholder = "Search Board Games",
+                              size = "lg",
+                              radius = "full",
+                              classNames,
+                              ...props
+                          }: InputProps) => (
     <Input
         aria-label="Search"
         type="search"

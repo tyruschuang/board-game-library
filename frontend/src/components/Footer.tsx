@@ -1,11 +1,10 @@
 "use client";
 
 import {Button} from "@heroui/button";
-import {Link} from "@heroui/link";
 import {Input} from "@heroui/input";
 import NextLink from "next/link";
 import {siteConfig} from "@/src/config/site";
-import {Logo, GithubIcon} from "@/src/components/Icons";
+import {Logo} from "@/src/components/Icons";
 
 export const Footer = () => {
     const year = new Date().getFullYear();
@@ -33,7 +32,8 @@ export const Footer = () => {
                         <ul className="mt-3 space-y-2">
                             {productLinks.map((item) => (
                                 <li key={item.href}>
-                                    <NextLink href={item.href} className="text-sm text-foreground-500 hover:text-foreground transition-colors">
+                                    <NextLink href={item.href}
+                                              className="text-sm text-foreground-500 hover:text-foreground transition-colors">
                                         {item.label}
                                     </NextLink>
                                 </li>
@@ -46,10 +46,12 @@ export const Footer = () => {
                         <h3 className="text-sm font-semibold tracking-wide text-foreground-600">Resources</h3>
                         <ul className="mt-3 space-y-2">
                             <li>
-                                <NextLink href="/blog" className="text-sm text-foreground-500 hover:text-foreground transition-colors">Blog</NextLink>
+                                <NextLink href="/blog"
+                                          className="text-sm text-foreground-500 hover:text-foreground transition-colors">Blog</NextLink>
                             </li>
                             <li>
-                                <NextLink href="/pricing" className="text-sm text-foreground-500 hover:text-foreground transition-colors">Pricing</NextLink>
+                                <NextLink href="/pricing"
+                                          className="text-sm text-foreground-500 hover:text-foreground transition-colors">Pricing</NextLink>
                             </li>
                         </ul>
                     </div>
@@ -57,7 +59,8 @@ export const Footer = () => {
                     {/* Newsletter */}
                     <div>
                         <h3 className="text-sm font-semibold tracking-wide text-foreground-600">Stay in the loop</h3>
-                        <p className="text-foreground-500 text-sm mt-3">Get updates on new features and curated game picks.</p>
+                        <p className="text-foreground-500 text-sm mt-3">Get updates on new features and curated game
+                            picks.</p>
                         <form className="mt-4 flex flex-col sm:flex-row gap-2" onSubmit={(e) => e.preventDefault()}>
                             <Input
                                 type="email"
@@ -71,7 +74,8 @@ export const Footer = () => {
                 </div>
 
                 {/* Bottom bar */}
-                <div className="mt-10 flex flex-col md:flex-row items-center justify-center gap-4 text-sm text-foreground-500">
+                <div
+                    className="mt-10 flex flex-col md:flex-row items-center justify-center gap-4 text-sm text-foreground-500">
                     <p>© {year} Boardy. All rights reserved.</p>
                 </div>
             </div>
