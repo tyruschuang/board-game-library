@@ -7,8 +7,8 @@ import {Button} from "@heroui/button"
 import {Link} from "@heroui/link"
 import {subtitle, title} from "@/src/components/primitives"
 import {EyeIcon, EyeOffIcon} from "@/src/components/Icons"
-import {apiFetch} from '@/src/lib/api'
-import {emitAuthChanged} from '@/src/lib/events'
+import {apiFetch} from '@/src/utils/api'
+import {emitAuthChanged} from '@/src/utils/events'
 
 export default function SignupPage() {
     return (

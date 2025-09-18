@@ -1,8 +1,8 @@
 "use client"
 import {useState} from 'react'
 import {useRouter} from 'next/navigation'
-import {apiFetch} from '@/src/lib/api'
-import {emitAuthChanged} from '@/src/lib/events'
+import {apiFetch} from '@/src/utils/api'
+import {emitAuthChanged} from '@/src/utils/events'
 
 export default function LogoutButton() {
     const router = useRouter()

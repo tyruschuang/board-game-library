@@ -12,9 +12,9 @@ import {Link} from "@heroui/link";
 import {SearchBar} from "./SearchBar";
 import {useEffect, useState} from 'react'
 import {usePathname, useRouter} from "next/navigation";
-import {apiFetch} from '@/src/lib/api'
+import {apiFetch} from '@/src/utils/api'
 import {Avatar} from '@/src/components/Avatar'
-import {emitAuthChanged, onAuthChanged} from '@/src/lib/events'
+import {emitAuthChanged, onAuthChanged} from '@/src/utils/events'
 import {Dropdown, DropdownItem, DropdownMenu, DropdownTrigger} from "@heroui/dropdown";
 import LogoutButton from '@/src/components/LogoutButton'
 
