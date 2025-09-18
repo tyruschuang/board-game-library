@@ -5,7 +5,6 @@ import {ThemeProvider as NextThemesProvider} from "next-themes";
 import * as React from "react";
 import {HeroUIProvider} from "@heroui/system";
 import {useRouter} from "next/navigation";
-import {Viewport} from "next";
 
 export function Providers({children}: { children: React.ReactNode }) {
     const router = useRouter();

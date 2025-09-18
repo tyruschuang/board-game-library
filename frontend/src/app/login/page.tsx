@@ -1,18 +1,19 @@
 "use client"
-import { FormEvent, useMemo, useState, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import {FormEvent, Suspense, useMemo, useState} from 'react'
+import {useRouter, useSearchParams} from 'next/navigation'
 import {Card, CardBody, CardHeader} from "@heroui/card";
 import {Input} from "@heroui/input";
 import {Button} from "@heroui/button";
 import {Link} from "@heroui/link";
-import {title, subtitle} from "@/src/components/primitives";
-import { EyeIcon, EyeOffIcon } from "@/src/components/Icons";
-import { apiFetch } from '@/src/lib/api'
+import {subtitle, title} from "@/src/components/primitives";
+import {EyeIcon, EyeOffIcon} from "@/src/components/Icons";
+import {apiFetch} from '@/src/lib/api'
+import {emitAuthChanged} from '@/src/lib/events'
 
 export default function LoginPage() {
     return (
         <Suspense fallback={<div className="container mx-auto max-w-7xl p-6">Loading…</div>}>
-            <LoginForm />
+            <LoginForm/>
         </Suspense>
     )
 }
@@ -37,12 +38,13 @@ function LoginForm() {
 
         const response = await apiFetch('/api/auth/login', {
             method: 'POST',
-            json: { email, password },
+            json: {email, password},
         })
 
         setLoading(false)
 
         if (response.ok) {
+            emitAuthChanged()
             router.push(next)
         } else {
             const data = await response.json().catch(() => null)
@@ -54,7 +56,7 @@ function LoginForm() {
         <section className="container mx-auto max-w-7xl min-h-[70vh] flex items-center justify-center">
             <div className="w-full max-w-md px-4">
                 <div className="mb-6 text-center">
-                    <h1 className={title({ size: "md" })}>Welcome back</h1>
+                    <h1 className={title({size: "md"})}>Welcome back</h1>
                     <p className={subtitle()}>Sign in to your account</p>
                 </div>
                 <Card className="bg-content1/60 backdrop-blur-md">
@@ -87,7 +89,7 @@ function LoginForm() {
                                         aria-label={passwordShown ? 'Hide password' : 'Show password'}
                                         aria-pressed={passwordShown}
                                     >
-                                        {passwordShown ? <EyeOffIcon /> : <EyeIcon />}
+                                        {passwordShown ? <EyeOffIcon/> : <EyeIcon/>}
                                     </button>
                                 }
                             />

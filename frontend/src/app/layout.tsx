@@ -9,8 +9,8 @@ import {fontSans} from "@/src/config/fonts";
 import {Header} from "@/src/components/Header";
 import {Footer} from "@/src/components/Footer";
 import React from "react";
-import { SpeedInsights } from "@vercel/speed-insights/next"
-import { Analytics } from "@vercel/analytics/next"
+import {SpeedInsights} from "@vercel/speed-insights/next"
+import {Analytics} from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
     title: {

@@ -52,7 +52,7 @@ export function Carousel({
         const child = el.children[index] as HTMLElement | undefined;
         if (!child) return;
         const left = child.offsetLeft - (el.clientWidth - child.clientWidth) / 2;
-        el.scrollTo({ left, behavior });
+        el.scrollTo({left, behavior});
     };
 
     // Nearest index to viewport center
@@ -93,7 +93,7 @@ export function Carousel({
                 scrollToIndex(index - base, "instant");
             }
         };
-        el.addEventListener("scroll", onScroll, { passive: true });
+        el.addEventListener("scroll", onScroll, {passive: true});
         return () => el.removeEventListener("scroll", onScroll);
     });
 
@@ -113,8 +113,10 @@ export function Carousel({
     return (
         <div className="relative">
             {/* Edge fades */}
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 md:w-24 z-10 bg-gradient-to-r from-background to-transparent" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 md:w-24 z-10 bg-gradient-to-l from-background to-transparent" />
+            <div
+                className="pointer-events-none absolute inset-y-0 left-0 w-16 md:w-24 z-10 bg-gradient-to-r from-background to-transparent"/>
+            <div
+                className="pointer-events-none absolute inset-y-0 right-0 w-16 md:w-24 z-10 bg-gradient-to-l from-background to-transparent"/>
 
             {/* Controls */}
             <div className="absolute left-2 top-1/2 z-20 -translate-y-1/2">

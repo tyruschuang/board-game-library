@@ -1,19 +1,13 @@
 import {Link} from "@heroui/link";
-import {Snippet} from "@heroui/snippet";
-import {Code} from "@heroui/code";
 import {Card, CardBody, CardHeader} from "@heroui/card";
-import {button as buttonStyles} from "@heroui/theme";
 import {Button} from "@heroui/button";
-import {Chip} from "@heroui/chip";
 
 import {siteConfig} from "@/src/config/site";
-import {subtitle, title} from "@/src/components/primitives";
-import {GithubIcon} from "@/src/components/Icons";
+import {title} from "@/src/components/primitives";
 import {Carousel} from "@/src/components/Carousel";
 import {sampleGames} from "@/src/config/sampleGames";
 import {StatsSection} from "@/src/components/Stats";
 import {SearchBar} from "@/src/components/SearchBar";
-import clsx from "clsx";
 import Image from "next/image";
 
 export default function Home() {
@@ -39,7 +33,8 @@ export default function Home() {
                         <div className="flex flex-row gap-3">
                             <Button color="primary" size="lg" className="basis-full">Get Started</Button>
                             {/*TODO: HRef to search page*/}
-                            <Button as={Link} href="#carousel" variant="bordered" size="lg" className="basis-full">Browse Games</Button>
+                            <Button as={Link} href="#carousel" variant="bordered" size="lg" className="basis-full">Browse
+                                Games</Button>
                         </div>
                     </div>
                 </div>
@@ -101,7 +96,7 @@ export default function Home() {
             </section>
 
             {/*Stats*/}
-            <StatsSection />
+            <StatsSection/>
         </div>
     );
 }

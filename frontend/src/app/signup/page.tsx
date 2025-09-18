@@ -1,18 +1,19 @@
 "use client"
-import { FormEvent, useMemo, useState, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { Card, CardBody, CardHeader } from "@heroui/card"
-import { Input } from "@heroui/input"
-import { Button } from "@heroui/button"
-import { Link } from "@heroui/link"
-import { title, subtitle } from "@/src/components/primitives"
-import { EyeIcon, EyeOffIcon } from "@/src/components/Icons"
-import { apiFetch } from '@/src/lib/api'
+import {FormEvent, Suspense, useMemo, useState} from 'react'
+import {useRouter, useSearchParams} from 'next/navigation'
+import {Card, CardBody, CardHeader} from "@heroui/card"
+import {Input} from "@heroui/input"
+import {Button} from "@heroui/button"
+import {Link} from "@heroui/link"
+import {subtitle, title} from "@/src/components/primitives"
+import {EyeIcon, EyeOffIcon} from "@/src/components/Icons"
+import {apiFetch} from '@/src/lib/api'
+import {emitAuthChanged} from '@/src/lib/events'
 
 export default function SignupPage() {
     return (
         <Suspense fallback={<div className="container mx-auto max-w-7xl p-6">Loading…</div>}>
-            <SignupForm />
+            <SignupForm/>
         </Suspense>
     )
 }
@@ -54,11 +55,12 @@ function SignupForm() {
         setLoading(true)
         const res = await apiFetch('/api/auth/register', {
             method: 'POST',
-            json: { name, email, password },
+            json: {name, email, password},
         })
         setLoading(false)
 
         if (res.ok) {
+            emitAuthChanged()
             router.push(next)
         } else {
             const data = await res.json().catch(() => null)
@@ -70,7 +72,7 @@ function SignupForm() {
         <section className="container mx-auto max-w-7xl min-h-[70vh] flex items-center justify-center">
             <div className="w-full max-w-md px-4">
                 <div className="mb-6 text-center">
-                    <h1 className={title({ size: "md" })}>Create your account</h1>
+                    <h1 className={title({size: "md"})}>Create your account</h1>
                     <p className={subtitle()}>Start organizing and discovering games</p>
                 </div>
                 <Card className="bg-content1/60 backdrop-blur-md">
@@ -111,7 +113,7 @@ function SignupForm() {
                                         aria-label={passwordShown ? 'Hide password' : 'Show password'}
                                         aria-pressed={passwordShown}
                                     >
-                                        {passwordShown ? <EyeOffIcon /> : <EyeIcon />}
+                                        {passwordShown ? <EyeOffIcon/> : <EyeIcon/>}
                                     </button>
                                 }
                             />
@@ -131,7 +133,7 @@ function SignupForm() {
                                         aria-label={confirmShown ? 'Hide password' : 'Show password'}
                                         aria-pressed={confirmShown}
                                     >
-                                        {confirmShown ? <EyeOffIcon /> : <EyeIcon />}
+                                        {confirmShown ? <EyeOffIcon/> : <EyeIcon/>}
                                     </button>
                                 }
                             />

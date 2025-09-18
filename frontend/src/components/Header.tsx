@@ -1,31 +1,35 @@
 "use client"
 
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle,} from "@heroui/navbar";
-import {Input} from "@heroui/input";
+import {Navbar, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle,} from "@heroui/navbar";
 import {link as linkStyles} from "@heroui/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
 
 import {siteConfig} from "@/src/config/site";
-import {Logo, SearchIcon,} from "@/src/components/Icons";
+import {Logo,} from "@/src/components/Icons";
 import {Button} from "@heroui/button";
-import { Link } from "@heroui/link";
-import { SearchBar } from "./SearchBar";
+import {Link} from "@heroui/link";
+import {SearchBar} from "./SearchBar";
 import {useEffect, useState} from 'react'
-import {usePathname} from "next/navigation";
-import { apiFetch } from '@/src/lib/api'
-import { Avatar } from '@/src/components/Avatar'
+import {usePathname, useRouter} from "next/navigation";
+import {apiFetch} from '@/src/lib/api'
+import {Avatar} from '@/src/components/Avatar'
+import {emitAuthChanged, onAuthChanged} from '@/src/lib/events'
+import {Dropdown, DropdownItem, DropdownMenu, DropdownTrigger} from "@heroui/dropdown";
+import LogoutButton from '@/src/components/LogoutButton'
 
 type User = { id: number; email: string; name: string }
 
 export const Header = () => {
     const pathname = usePathname();
     const isHome = pathname === "/";
+    const router = useRouter();
     const [user, setUser] = useState<User | null>(null)
 
     useEffect(() => {
         let mounted = true
-        ;(async () => {
+
+        async function load() {
             try {
                 const res = await apiFetch('/api/auth/me')
                 if (!mounted) return
@@ -36,13 +40,19 @@ export const Header = () => {
                     setUser(null)
                 }
             } catch {
-                setUser(null)
-            } finally {
-                // no-op
+                if (mounted) setUser(null)
             }
-        })()
-        return () => { mounted = false }
-    }, [])
+        }
+
+        load()
+        const off = onAuthChanged(() => {
+            load()
+        })
+        return () => {
+            mounted = false;
+            off()
+        }
+    }, [pathname])
 
     return (
         <Navbar
@@ -86,10 +96,36 @@ export const Header = () => {
                 )}
                 {user ? (
                     <NavbarItem>
-                        <NextLink href="/profile" className="flex items-center gap-2">
-                            <Avatar name={user.name} email={user.email} size={28} />
-                            <span className="hidden lg:inline">Profile</span>
-                        </NextLink>
+                        <Dropdown placement="bottom-end">
+                            <DropdownTrigger>
+                                <Button color="primary" variant="solid" className="px-2">
+                                    <span className="flex items-center gap-2">
+                                        <Avatar name={user.name} email={user.email} size={24}/>
+                                        <span className="hidden lg:inline">Profile</span>
+                                    </span>
+                                </Button>
+                            </DropdownTrigger>
+                            <DropdownMenu
+                                aria-label="Profile menu"
+                                onAction={async (key) => {
+                                    const k = String(key)
+                                    if (k === 'profile') router.push('/profile')
+                                    else if (k === 'settings') router.push('/settings')
+                                    else if (k === 'logout') {
+                                        try {
+                                            await apiFetch('/api/auth/logout', {method: 'POST'})
+                                        } finally {
+                                            emitAuthChanged()
+                                            router.replace('/login')
+                                        }
+                                    }
+                                }}
+                            >
+                                <DropdownItem key="profile">Profile</DropdownItem>
+                                <DropdownItem key="settings">Settings</DropdownItem>
+                                <DropdownItem key="logout" className="text-danger" color="danger">Logout</DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
                     </NavbarItem>
                 ) : (
                     <NavbarItem>
@@ -130,12 +166,17 @@ export const Header = () => {
                         </NavbarMenuItem>
                     ))}
                     {user ? (
-                        <NavbarMenuItem>
-                            <NextLink href="/profile" className="flex items-center gap-2">
-                                <Avatar name={user.name} email={user.email} size={28} />
-                                <span>Profile</span>
-                            </NextLink>
-                        </NavbarMenuItem>
+                        <>
+                            <NavbarMenuItem>
+                                <NextLink href="/profile" className="flex items-center gap-2">
+                                    <Avatar name={user.name} email={user.email} size={28}/>
+                                    <span>Profile</span>
+                                </NextLink>
+                            </NavbarMenuItem>
+                            <NavbarMenuItem>
+                                <LogoutButton/>
+                            </NavbarMenuItem>
+                        </>
                     ) : (
                         <NavbarMenuItem>
                             <NextLink href={isHome ? "/signup" : "/login"}>
