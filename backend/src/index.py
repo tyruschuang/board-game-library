@@ -1,11 +1,10 @@
-from flask import Flask, request
 import os
+import sys
+import importlib.util
 
-try:
-    # Prefer relative import when running as package
-    from . import auth  # type: ignore
-except Exception:
-    auth = None  # type: ignore
+from flask import Flask, request, make_response
+
+from . import auth
 
 app = Flask(__name__)
 
@@ -14,6 +13,14 @@ app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY") or os.environ.get("JWT_S
 
 if auth is not None:
     app.register_blueprint(auth.bp)
+
+
+@app.before_request
+def handle_preflight():
+    # Ensure CORS preflight (OPTIONS) returns an OK status
+    if request.method == "OPTIONS":
+        # Empty 204 response; CORS headers will be appended in after_request
+        return make_response("", 204)
 
 
 @app.after_request

@@ -1,6 +1,6 @@
 "use client"
 import Image from 'next/image'
-import {useMemo, useState} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 import {Card, CardBody, CardHeader} from '@heroui/card'
 import {Chip} from '@heroui/chip'
 import {Button} from '@heroui/button'
@@ -9,6 +9,7 @@ import {subtitle, title} from '@/src/components/primitives'
 import {allTags, discoverGames} from '@/src/config/discoverGames'
 import {SearchBar} from '@/src/components/SearchBar'
 import {Select, SelectItem} from "@heroui/select";
+import {sampleCollections} from '@/src/config/collections'
 
 type TimeBucket = {
     id: string
@@ -30,6 +31,46 @@ export default function DiscoverPage() {
     const [selectedTime, setSelectedTime] = useState<string | null>(null)
     const [players, setPlayers] = useState<number | ''>('')
     const [weight, setWeight] = useState<'light' | 'medium' | 'heavy' | ''>('')
+
+    // Dummy local persistence for Owned and Collections
+    const [ownedIds, setOwnedIds] = useState<Set<string>>(new Set())
+    const [collectionSelections, setCollectionSelections] = useState<Record<string, string | null>>({})
+
+    useEffect(() => {
+        // Load from localStorage (demo-only)
+        try {
+            const rawOwned = localStorage.getItem('ownedGameIds')
+            if (rawOwned) setOwnedIds(new Set(JSON.parse(rawOwned)))
+        } catch {}
+    }, [])
+
+    useEffect(() => {
+        // Persist Owned to localStorage (demo-only)
+        try {
+            localStorage.setItem('ownedGameIds', JSON.stringify(Array.from(ownedIds)))
+        } catch {}
+    }, [ownedIds])
+
+    function addToOwned(id: string) {
+        if (ownedIds.has(id)) return
+        setOwnedIds(prev => new Set(prev).add(id))
+    }
+
+    function addToCollection(gameId: string, collectionId: string | null) {
+        if (!collectionId) return
+        try {
+            const key = 'collectionsMap'
+            const raw = localStorage.getItem(key)
+            const map: Record<string, string[]> = raw ? JSON.parse(raw) : {}
+            const list = new Set(map[collectionId] || [])
+            list.add(gameId)
+            map[collectionId] = Array.from(list)
+            localStorage.setItem(key, JSON.stringify(map))
+        } catch {
+            // ignore demo-only errors
+        }
+        setCollectionSelections(prev => ({...prev, [gameId]: null}))
+    }
 
     const results = useMemo(() => {
         let list = discoverGames
@@ -169,6 +210,48 @@ export default function DiscoverPage() {
                                     <Chip key={t} size="sm" variant="flat"
                                           className="capitalize">{t.replace('-', ' ')}</Chip>
                                 ))}
+                            </div>
+                            {/* Actions: Owned / Add to Collection */}
+                            <div className="mt-4 flex flex-col gap-3">
+                                <div className="flex gap-2">
+                                    <Button
+                                        size="sm"
+                                        color={ownedIds.has(g.id) ? 'success' : 'primary'}
+                                        variant={ownedIds.has(g.id) ? 'flat' : 'solid'}
+                                        onPress={() => addToOwned(g.id)}
+                                        isDisabled={ownedIds.has(g.id)}
+                                        className="shrink-0"
+                                    >
+                                        {ownedIds.has(g.id) ? 'Owned' : 'Add to Owned'}
+                                    </Button>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2 items-end">
+                                    <Select
+                                        aria-label="Add to collection"
+                                        label="Add to collection"
+                                        labelPlacement="outside"
+                                        placeholder={sampleCollections.length ? 'Select a collection' : 'No collections'}
+                                        items={sampleCollections}
+                                        selectedKeys={collectionSelections[g.id] ? new Set([collectionSelections[g.id]!]) : new Set()}
+                                        onSelectionChange={(keys: any) => {
+                                            const key = Array.from(keys as Set<any>)[0]
+                                            setCollectionSelections(prev => ({...prev, [g.id]: key ? String(key) : null}))
+                                        }}
+                                        selectionMode="single"
+                                        variant="bordered"
+                                        isDisabled={sampleCollections.length === 0}
+                                    >
+                                        {(c) => <SelectItem key={c.id}>{c.name}</SelectItem>}
+                                    </Select>
+                                    <Button
+                                        size="sm"
+                                        color="secondary"
+                                        onPress={() => addToCollection(g.id, collectionSelections[g.id] || null)}
+                                        isDisabled={!collectionSelections[g.id]}
+                                    >
+                                        Add
+                                    </Button>
+                                </div>
                             </div>
                         </CardBody>
                     </Card>

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "flask-dev": "pip3 install -r requirements.txt && python -m flask --app src/api/index.py run -p 5328",
+    "flask-dev": "pip3 install -r ../backend/requirements.txt && python -m flask --app ../backend/src/index.py run -p 5328",
     "next-dev": "next dev",
     "dev": "concurrently \"yarn next-dev\" \"yarn flask-dev\"",
     "build": "next build",

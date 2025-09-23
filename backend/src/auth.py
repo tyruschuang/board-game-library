@@ -10,9 +10,7 @@ try:
 except Exception:  # Fallback if dependency missing; tokens will be simple placeholders
     jwt = None
 
-
 bp = Blueprint("auth", __name__, url_prefix="/api/auth")
-
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "users.db")
 
@@ -93,7 +91,8 @@ def _verify_token_from_request():
 
     if jwt is not None:
         try:
-            secret = (current_app.config.get("SECRET_KEY") or os.environ.get("JWT_SECRET") or "dev-secret-change-me").encode()
+            secret = (current_app.config.get("SECRET_KEY") or os.environ.get(
+                "JWT_SECRET") or "dev-secret-change-me").encode()
             issuer = os.environ.get("JWT_ISSUER", "board-game-library")
             audience = os.environ.get("JWT_AUDIENCE", "board-game-client")
             payload = jwt.decode(token, secret, algorithms=["HS256"], issuer=issuer, audience=audience)
