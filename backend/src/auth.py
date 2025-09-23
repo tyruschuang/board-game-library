@@ -5,10 +5,7 @@ from datetime import datetime, timedelta, timezone
 from flask import Blueprint, current_app, jsonify, make_response, request
 from werkzeug.security import generate_password_hash, check_password_hash
 
-try:
-    import jwt  # PyJWT
-except Exception:  # Fallback if dependency missing; tokens will be simple placeholders
-    jwt = None
+import jwt
 
 bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
