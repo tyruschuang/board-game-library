@@ -90,7 +90,7 @@ export default function CollectionsManager() {
                     className="object-cover"
                   />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col min-w-0 flex-1">
                   <span className="font-medium">{c.name}</span>
                   <span className="text-small text-foreground-500">{c.games.length} games</span>
                 </div>
@@ -174,10 +174,10 @@ export default function CollectionsManager() {
                   {selected.games.map((g) => (
                     <Card key={g.id} className="bg-content2/60 overflow-hidden">
                       <CardHeader className="flex items-center gap-3">
-                        <div className="relative w-14 h-14 rounded-md overflow-hidden">
+                        <div className="relative w-14 h-14 rounded-md overflow-hidden shrink-0">
                           <Image src={g.image} alt={g.name} fill className="object-cover" />
                         </div>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col min-w-0 flex-1">
                           <span className="font-medium">{g.name}</span>
                           <span className="text-small text-foreground-500">{g.year ?? '—'} • {g.players ?? ''}</span>
                         </div>
@@ -202,4 +202,6 @@ export default function CollectionsManager() {
     </div>
   )
 }
+
+
 

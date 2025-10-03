@@ -21,7 +21,7 @@ export function CollectionsPreview() {
         {collections.map((c) => (
           <Card key={c.id} className="bg-content1/60 overflow-hidden">
             <CardHeader className="flex items-center gap-3">
-              <div className="relative w-16 h-16 rounded-md overflow-hidden">
+              <div className="relative w-16 h-16 rounded-md overflow-hidden shrink-0">
                 <Image
                   src={c.games[0]?.image || 'https://picsum.photos/seed/collection/200/200'}
                   alt={c.name}
@@ -29,7 +29,7 @@ export function CollectionsPreview() {
                   className="object-cover"
                 />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col min-w-0 flex-1">
                 <div className="font-semibold">{c.name}</div>
                 <div className="text-small text-foreground-500">{c.games.length} games</div>
               </div>
@@ -52,4 +52,7 @@ export function CollectionsPreview() {
     </div>
   )
 }
+
+
+
 

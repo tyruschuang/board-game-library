@@ -5,6 +5,7 @@ import importlib.util
 from flask import Flask, request, make_response
 
 from . import auth
+from . import bgg
 
 app = Flask(__name__)
 
@@ -13,6 +14,11 @@ app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY") or os.environ.get("JWT_S
 
 if auth is not None:
     app.register_blueprint(auth.bp)
+if bgg is not None:
+    app.register_blueprint(bgg.bp)
+
+def create_app():
+    return app
 
 
 @app.before_request

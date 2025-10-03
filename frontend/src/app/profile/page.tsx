@@ -104,7 +104,7 @@ export default async function ProfilePage() {
                 <section className="space-y-3">
                     <div className="flex items-center justify-between">
                         <h2 className="text-xl font-semibold">Owned</h2>
-                        <Button as={Link} href="/discover" size="sm" variant="bordered">Add more</Button>
+                        {/* Discover page removed */}
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
                         {owned.map((g) => (
@@ -124,7 +124,7 @@ export default async function ProfilePage() {
                 <section className="space-y-3">
                     <div className="flex items-center justify-between">
                         <h2 className="text-xl font-semibold">Wishlist</h2>
-                        <Button as={Link} href="/discover" size="sm" variant="bordered">Discover</Button>
+                        {/* Discover page removed */}
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
                         {wishlist.map((g) => (

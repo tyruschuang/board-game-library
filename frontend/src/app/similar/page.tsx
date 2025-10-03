@@ -99,10 +99,10 @@ export default function SimilarPage() {
         </Select>
         {base && (
           <div className="flex items-center gap-3">
-            <div className="relative w-16 h-16 rounded-md overflow-hidden">
+            <div className="relative w-16 h-16 rounded-md overflow-hidden shrink-0">
               <Image src={base.image} alt={base.name} fill className="object-cover" />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col min-w-0 flex-1">
               <div className="font-semibold">{base.name}</div>
               <div className="text-small text-foreground-500">
                 {base.players.min}-{base.players.max} players • {base.time.min}-{base.time.max}m • {base.weight}
@@ -121,10 +121,10 @@ export default function SimilarPage() {
         {results.map(({game, score, reasons, commonTags}) => (
           <Card key={game.id} className="bg-content1/60 overflow-hidden">
             <CardHeader className="flex gap-3 items-center">
-              <div className="relative w-16 h-16 rounded-md overflow-hidden">
+              <div className="relative w-16 h-16 rounded-md overflow-hidden shrink-0">
                 <Image src={game.image} alt={game.name} fill className="object-cover" />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col min-w-0 flex-1">
                 <div className="font-semibold">{game.name}</div>
                 <div className="text-small text-foreground-500">
                   {(score * 100).toFixed(0)}% match • {game.players.min}-{game.players.max} players • {game.time.min}-{game.time.max}m
@@ -153,3 +153,6 @@ export default function SimilarPage() {
     </div>
   )
 }
+
+
+

@@ -13,7 +13,13 @@ const nextConfig = {
     },
     images: {
         remotePatterns: [
-            new URL("https://picsum.photos/**")
+            { protocol: 'https', hostname: 'picsum.photos', pathname: '/**' },
+            { protocol: 'https', hostname: 'cf.geekdo-images.com', pathname: '/**' },
+            { protocol: 'https', hostname: 'images.boardgamegeek.com', pathname: '/**' },
+            { protocol: 'https', hostname: 'boardgamegeek.com', pathname: '/**' },
+            { protocol: 'http', hostname: 'cf.geekdo-images.com', pathname: '/**' },
+            { protocol: 'http', hostname: 'images.boardgamegeek.com', pathname: '/**' },
+            { protocol: 'http', hostname: 'boardgamegeek.com', pathname: '/**' },
         ]
     }
 }
