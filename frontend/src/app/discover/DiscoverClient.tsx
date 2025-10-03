@@ -6,6 +6,7 @@ import {Chip} from '@heroui/chip'
 import {Button} from '@heroui/button'
 import {Input} from '@heroui/input'
 import {Select, SelectItem} from '@heroui/select'
+import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from '@heroui/modal'
 import {subtitle, title} from '@/src/components/primitives'
 import {SearchBar} from '@/src/components/SearchBar'
 import {Spinner} from '@heroui/spinner'
@@ -47,7 +48,7 @@ export function DiscoverClient({
   initialPages: number
 }) {
   const [error, setError] = useState<string | null>(null)
-    const sentinelRef = useRef<HTMLDivElement | null>(null)
+  const sentinelRef = useRef<HTMLDivElement | null>(null)
   const [query, setQuery] = useState('')
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set())
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
@@ -60,18 +61,19 @@ export function DiscoverClient({
   const [page, setPage] = useState(1)
   const [pages, setPages] = useState(initialPages)
   const [loading, setLoading] = useState(false)
-  
+
   const LIMIT = 20
-const [selected, setSelected] = useState<BggGame | null>(null)
+  const [selected, setSelected] = useState<BggGame | null>(null)
   const [detailsOpen, setDetailsOpen] = useState(false)
+  const [filtersOpen, setFiltersOpen] = useState(false)
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const abortRef = useRef<AbortController | null>(null)
-  
-    // Track that we've already used the server-provided initial hot results once
+
+  // Track that we've already used the server-provided initial hot results once
   const usedInitialHotRef = useRef<boolean>(false)
   const nextAllowedAtRef = useRef<number>(0)
-// Track that we've already used the server-provided initial hot results once
+
   const effectivePages = useMemo(() => {
     if (pages && pages > 0) return pages
     if (total && total > 0) return Math.ceil(total / LIMIT)
@@ -83,6 +85,16 @@ const [selected, setSelected] = useState<BggGame | null>(null)
     for (const g of results) for (const t of (g.tags || [])) tags.add(t)
     return Array.from(tags).sort()
   }, [results])
+
+  const hasFilterSelections = useMemo(() => Boolean(
+    selectedTags.size ||
+    selectedTime ||
+    players !== '' ||
+    weight ||
+    sort !== 'relevance'
+  ), [selectedTags, selectedTime, players, weight, sort])
+
+  const canClear = useMemo(() => Boolean(query.trim() || hasFilterSelections), [query, hasFilterSelections])
 
   // Relevance scoring
   function scoreRelevance(g: BggGame): number {
@@ -149,6 +161,7 @@ const [selected, setSelected] = useState<BggGame | null>(null)
     setWeight('')
     setSort('relevance')
     setPage(1)
+    setFiltersOpen(false)
   }
 
   // Data fetcher effect
@@ -168,19 +181,21 @@ const [selected, setSelected] = useState<BggGame | null>(null)
     }
 
     if (debounceRef.current) clearTimeout(debounceRef.current)
-    const now = Date.now()
+
+    setLoading(true)
+    setError(null)
+
     const baseDelay = 250
-    const throttleDelay = Math.max(0, nextAllowedAtRef.current - now)
+    const throttleDelay = Math.max(0, nextAllowedAtRef.current - Date.now())
     const delay = Math.max(baseDelay, throttleDelay)
+
     debounceRef.current = setTimeout(async () => {
-      // Reserve next allowed time for throttle (5s)
-      nextAllowedAtRef.current = Date.now() + 5000
+      const requestWindowEndsAt = Date.now() + 3000
+      nextAllowedAtRef.current = requestWindowEndsAt
       abortRef.current?.abort()
       const ac = new AbortController()
       abortRef.current = ac
       try {
-        setLoading(true)
-        setError(null)
         const params = new URLSearchParams()
         params.set('limit', '20')
         params.set('page', String(page))
@@ -200,6 +215,14 @@ const [selected, setSelected] = useState<BggGame | null>(null)
         if (!res.ok) throw new Error(`Request failed: ${res.status}`)
         const data = await res.json()
         const newResults = (data?.results || []) as BggGame[]
+
+        const waitMs = Math.max(0, requestWindowEndsAt - Date.now())
+        if (waitMs > 0) {
+          await new Promise(resolve => setTimeout(resolve, waitMs))
+        }
+
+        if (abortRef.current !== ac) return
+
         setTotal(Number(data?.total || 0))
         setPages(Number(data?.pages || 0))
         setResults(prev => (page > 1 ? [...prev, ...newResults] : newResults))
@@ -209,11 +232,12 @@ const [selected, setSelected] = useState<BggGame | null>(null)
         setError(e?.message || 'Failed to fetch')
         if (page === 1) setResults([])
       } finally {
-        setLoading(false)
+        if (abortRef.current === ac) setLoading(false)
       }
     }, delay)
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current) }
   }, [query, selectedTags, selectedTime, players, weight, page])
+
 
   // Reset pagination when filters or query change (except page itself)
   useEffect(() => { setPage(1); nextAllowedAtRef.current = 0 }, [query, selectedTags, selectedTime, players, weight])
@@ -245,97 +269,130 @@ const [selected, setSelected] = useState<BggGame | null>(null)
 
       {/* Search + Filters */}
       <Card className="bg-content1/50 backdrop-blur-md">
-        <CardBody className="flex flex-col gap-4">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_auto_auto_auto] gap-3 items-end">
-            <SearchBar
-              placeholder="Search games"
-              value={query}
-              onValueChange={setQuery as any}
-              classNames={{inputWrapper: 'bg-default-100'}}
-            />
-            <Input
-              type="number"
-              label="Players"
-              min={1}
-              max={20}
-              value={players === '' ? '' : String(players)}
-              onValueChange={(v) => setPlayers(v ? Math.max(1, Math.min(20, Number(v))) : '')}
-              variant="bordered"
-            />
-            <Select
-              aria-label="Time to play"
-              label="Time"
-              items={TIME_BUCKETS}
-              placeholder="Any"
-              selectedKeys={selectedTime ? new Set([selectedTime]) : new Set()}
-              onSelectionChange={(keys: any) => {
-                const key = Array.from(keys as Set<any>)[0]
-                setSelectedTime(key ? String(key) : null)
-              }}
-              selectionMode="single"
-              variant="bordered"
-            >
-              {(t) => <SelectItem>{t.label}</SelectItem>}
-            </Select>
-            <Select
-              aria-label="Weight"
-              label="Weight"
-              items={WEIGHTS}
-              placeholder="Any"
-              selectedKeys={new Set([weight || ''])}
-              onSelectionChange={(keys: any) => {
-                const key = Array.from(keys as Set<any>)[0]
-                const v = (key ? String(key) : '') as 'light'|'medium'|'heavy'|''
-                setWeight(v)
-              }}
-              selectionMode="single"
-              variant="bordered"
-            >
-              {(w) => <SelectItem>{w.label}</SelectItem>}
-            </Select>
-            <Select
-              aria-label="Sort by"
-              label="Sort"
-              items={SORTS}
-              placeholder="Relevance"
-              selectedKeys={new Set([sort])}
-              onSelectionChange={(keys: any) => {
-                const key = Array.from(keys as Set<any>)[0] as any
-                setSort((key || 'relevance') as any)
-              }}
-              selectionMode="single"
-              variant="bordered"
-            >
-              {(s) => <SelectItem>{s.label}</SelectItem>}
-            </Select>
-          </div>
-          <Select
-            aria-label="Tags"
-            label="Tags"
-            items={availableTags.map((tag) => ({id: tag, label: tag.replace('-', ' ')}))}
-            placeholder={availableTags.length ? 'Filter by tags' : 'Tags load from results'}
-            selectionMode="multiple"
-            selectedKeys={selectedTags}
-            onSelectionChange={(keys: any) => {
-              if (keys === 'all') setSelectedTags(new Set(availableTags))
-              else setSelectedTags(new Set(Array.from(keys as Set<any>).map(String)))
-            }}
-            variant="bordered"
-          >
-            {(tag) => <SelectItem className="capitalize">{tag.label}</SelectItem>}
-          </Select>
-          <div className="flex gap-2 justify-end">
-            <Button variant="flat" onPress={clearFilters}>Clear</Button>
+        <CardBody className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end">
+            <div className="flex-1">
+              <SearchBar
+                placeholder="Search games"
+                value={query}
+                onValueChange={setQuery as any}
+                classNames={{inputWrapper: 'bg-default-100'}}
+              />
+            </div>
+            <div className="flex items-center justify-end gap-2 lg:justify-start">
+              <Button
+                variant={hasFilterSelections ? 'solid' : 'bordered'}
+                color={hasFilterSelections ? 'primary' : 'default'}
+                onPress={() => setFiltersOpen(true)}
+              >
+                {hasFilterSelections ? 'Filters • Active' : 'Filters'}
+              </Button>
+              <Button variant="light" onPress={clearFilters} isDisabled={!canClear}>Clear</Button>
+            </div>
           </div>
         </CardBody>
       </Card>
 
-      {/* Results header */}
-      <div className="flex items-center justify-between">
-        <div className="text-small text-foreground-500">{results.length} shown{total ? ` • ${total} total` : ''}</div>
-        {error && <div className="text-tiny text-danger">{error}</div>}
-      </div>
+      <Modal isOpen={filtersOpen} onOpenChange={setFiltersOpen} scrollBehavior="inside">
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                <span className="text-base font-semibold">Refine Results</span>
+                <span className="text-small text-foreground-500">Adjust filters or sorting to narrow the list</span>
+              </ModalHeader>
+              <ModalBody className="flex flex-col gap-6">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Input
+                    type="number"
+                    label="Players"
+                    min={1}
+                    max={20}
+                    value={players === '' ? '' : String(players)}
+                    onValueChange={(v) => setPlayers(v ? Math.max(1, Math.min(20, Number(v))) : '')}
+                    variant="bordered"
+                  />
+                  <Select
+                    aria-label="Time to play"
+                    label="Time"
+                    items={TIME_BUCKETS}
+                    placeholder="Any"
+                    selectedKeys={selectedTime ? new Set([selectedTime]) : new Set()}
+                    onSelectionChange={(keys: any) => {
+                      const key = Array.from(keys as Set<any>)[0]
+                      setSelectedTime(key ? String(key) : null)
+                    }}
+                    selectionMode="single"
+                    variant="bordered"
+                  >
+                    {(t) => <SelectItem>{t.label}</SelectItem>}
+                  </Select>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Select
+                    aria-label="Weight"
+                    label="Weight"
+                    items={WEIGHTS}
+                    placeholder="Any"
+                    selectedKeys={new Set([weight || ''])}
+                    onSelectionChange={(keys: any) => {
+                      const key = Array.from(keys as Set<any>)[0]
+                      const v = (key ? String(key) : '') as 'light'|'medium'|'heavy'|''
+                      setWeight(v)
+                    }}
+                    selectionMode="single"
+                    variant="bordered"
+                  >
+                    {(w) => <SelectItem>{w.label}</SelectItem>}
+                  </Select>
+                  <Select
+                    aria-label="Sort by"
+                    label="Sort"
+                    items={SORTS}
+                    placeholder="Relevance"
+                    selectedKeys={new Set([sort])}
+                    onSelectionChange={(keys: any) => {
+                      const key = Array.from(keys as Set<any>)[0] as any
+                      setSort((key || 'relevance') as any)
+                    }}
+                    selectionMode="single"
+                    variant="bordered"
+                  >
+                    {(s) => <SelectItem>{s.label}</SelectItem>}
+                  </Select>
+                </div>
+                <Select
+                  aria-label="Tags"
+                  label="Tags"
+                  items={availableTags.map((tag) => ({id: tag, label: tag.replace('-', ' ')}))}
+                  placeholder={availableTags.length ? 'Filter by tags' : 'Tags load from results'}
+                  selectionMode="multiple"
+                  selectedKeys={selectedTags}
+                  onSelectionChange={(keys: any) => {
+                    if (keys === 'all') setSelectedTags(new Set(availableTags))
+                    else setSelectedTags(new Set(Array.from(keys as Set<any>).map(String)))
+                  }}
+                  variant="bordered"
+                >
+                  {(tag) => <SelectItem className="capitalize">{tag.label}</SelectItem>}
+                </Select>
+              </ModalBody>
+              <ModalFooter className="flex justify-between">
+                <Button variant="light" onPress={clearFilters} isDisabled={!canClear}>Reset</Button>
+                <Button color="primary" onPress={() => onClose()}>Done</Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
 
+      {/* Results header */}
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center justify-between">
+          <div className="text-small text-foreground-500">{results.length} shown{total ? ` • ${total} total` : ''}{loading ? ` (loading...)` : ''}</div>
+          {error && <div className="text-tiny text-danger">{error}</div>}
+        </div>
+      </div>
       {/* Results */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {sortedResults.map((g) => (
@@ -377,6 +434,8 @@ const [selected, setSelected] = useState<BggGame | null>(null)
     </div>
   )
 }
+
+
 
 
 
